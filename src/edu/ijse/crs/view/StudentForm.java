@@ -4,18 +4,76 @@
  */
 package edu.ijse.crs.view;
 
+import java.sql.ResultSet;
+import java.sql.Connection;
+import edu.ijse.crs.db.DBconnection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author HP
  */
 public class StudentForm extends javax.swing.JFrame {
+    
+    Connection conn=null;
+    PreparedStatement pst=null;
+    ResultSet rs = null;
 
     /**
      * Creates new form StudentForm
      */
-    public StudentForm() {
+    public StudentForm() throws ClassNotFoundException, SQLException {
         initComponents();
+        conn = DBconnection.getInstance().getConnection();
+        tableload();
     }
+     public void tableload(){
+         try {
+        String sql = "SELECT StudentID, StudentName, DOB, Program, Year, Phone FROM student";
+        pst = conn.prepareStatement(sql);
+        rs = pst.executeQuery();
+
+        DefaultTableModel model = new DefaultTableModel();
+
+        // Add columns
+        java.sql.ResultSetMetaData rsmd = rs.getMetaData();
+        int columnCount = rsmd.getColumnCount();
+        for (int i = 1; i <= columnCount; i++) {
+            model.addColumn(rsmd.getColumnName(i));
+        }
+
+        // Add rows
+        while (rs.next()) {
+            Object[] row = new Object[columnCount];
+            for (int i = 0; i < columnCount; i++) {
+                row[i] = rs.getObject(i + 1);
+            }
+            model.addRow(row);
+        }
+
+        studentDetailTable.setModel(model);
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, e);
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (pst != null) pst.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+       }
+   
+     }
+     public void tableload(){
+         int raw=studentDetailTable
+     }
+     
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -291,6 +349,33 @@ public class StudentForm extends javax.swing.JFrame {
 
     private void addStudentbtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addStudentbtn1ActionPerformed
         // TODO add your handling code here:
+        String sID;
+        String sName;
+        String sDOB;
+        String program;
+        int year;
+        String scontact;
+        
+        sID=studentIDtxt.getText();
+        sName=studentNametxt.getText();
+        sDOB=studentDOBtxt.getText();
+        program=studentProgramtxt.getText();
+        year=Integer.parseInt(studentYeartxt.getText());
+        scontact=studentContacttxt.getText();
+        
+        try {
+            String sql="INSERT INTO student( StudentID, StudentName,DOB,Program,Year,Phone)VALUES ('"+sID+"','"+sName+"','"+sDOB+"','"+program+"','"+year+"','"+scontact+"')";
+            pst=conn.prepareStatement(sql);
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Data added sucessfuly...");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,e);
+        }
+        
+        tableload();
+       
+        
+        
     }//GEN-LAST:event_addStudentbtn1ActionPerformed
 
     private void deleteStudentbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteStudentbtnActionPerformed
@@ -339,7 +424,13 @@ public class StudentForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StudentForm().setVisible(true);
+                try {
+                    new StudentForm().setVisible(true);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(StudentForm.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(StudentForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

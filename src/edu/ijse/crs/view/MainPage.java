@@ -76,6 +76,9 @@ public class MainPage extends javax.swing.JFrame {
 
     private void studentbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentbtnActionPerformed
         // TODO add your handling code here:
+        studentLogin sLogin=new studentLogin();
+        sLogin.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_studentbtnActionPerformed
 
     /**

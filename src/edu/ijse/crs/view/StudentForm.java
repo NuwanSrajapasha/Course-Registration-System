@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -70,8 +71,42 @@ public class StudentForm extends javax.swing.JFrame {
        }
    
      }
-     public void tableload(){
-         int raw=studentDetailTable
+     public void tabledata(){
+         int raw=studentDetailTable.getSelectedRow();
+         String sid = studentDetailTable.getValueAt(raw, 0).toString();
+         String sName = studentDetailTable.getValueAt(raw, 1).toString();
+         String DOB = studentDetailTable.getValueAt(raw, 2).toString();
+         String program = studentDetailTable.getValueAt(raw, 3).toString();
+         String year = studentDetailTable.getValueAt(raw, 4).toString();
+         String scontact = studentDetailTable.getValueAt(raw, 5).toString();
+         
+         studentIDtxt.setText(sid);
+         studentNametxt.setText(sName);
+         studentDOBtxt.setText(DOB);
+         studentProgramtxt.setText(program);
+         studentYeartxt.setText(year);
+         studentContacttxt.setText(scontact);
+         
+         
+     }
+     public void searchbox(){
+         String searchb=searchByIDtxt.getText();
+         
+         try {
+             String sql="SELECT * FROM student WHERE StudentID LIKE '%"+searchb+"%' OR StudentName LIKE '%"+searchb+"%'";
+             pst=conn.prepareCall(sql);
+             rs=pst.executeQuery();
+             studentDetailTable.setModel(DbUtils.resultSetToTableModel(rs));
+             
+         } catch (Exception e) {
+             JOptionPane.showMessageDialog(null, e);
+         }
+     }
+     
+     public void updatebtn(){
+         
+     
+     
      }
      
 
@@ -162,10 +197,26 @@ public class StudentForm extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        studentDetailTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                studentDetailTableMouseClicked(evt);
+            }
+        });
+        studentDetailTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                studentDetailTableKeyReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(studentDetailTable);
 
         searchByID.setBackground(new java.awt.Color(153, 255, 204));
-        searchByID.setBorder(javax.swing.BorderFactory.createTitledBorder("Search by ID"));
+        searchByID.setBorder(javax.swing.BorderFactory.createTitledBorder("Search by ID or Name"));
+
+        searchByIDtxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchByIDtxtKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout searchByIDLayout = new javax.swing.GroupLayout(searchByID);
         searchByID.setLayout(searchByIDLayout);
@@ -340,6 +391,8 @@ public class StudentForm extends javax.swing.JFrame {
                         .addGap(121, 121, 121))))
         );
 
+        searchByID.getAccessibleContext().setAccessibleName("Search by ID or Name");
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -393,6 +446,21 @@ public class StudentForm extends javax.swing.JFrame {
     private void entrolmentbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entrolmentbtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_entrolmentbtnActionPerformed
+
+    private void studentDetailTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_studentDetailTableMouseClicked
+        // TODO add your handling code here:
+        tabledata();
+    }//GEN-LAST:event_studentDetailTableMouseClicked
+
+    private void studentDetailTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_studentDetailTableKeyReleased
+        // TODO add your handling code here:
+        tabledata();
+    }//GEN-LAST:event_studentDetailTableKeyReleased
+
+    private void searchByIDtxtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchByIDtxtKeyReleased
+        // TODO add your handling code here:
+        searchbox();
+    }//GEN-LAST:event_searchByIDtxtKeyReleased
 
     /**
      * @param args the command line arguments

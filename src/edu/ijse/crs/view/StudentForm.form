@@ -271,6 +271,10 @@
               </Table>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="studentDetailTableMouseClicked"/>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="studentDetailTableKeyReleased"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -281,10 +285,13 @@
         </Property>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Search by ID"/>
+            <TitledBorder title="Search by ID or Name"/>
           </Border>
         </Property>
       </Properties>
+      <AccessibilityProperties>
+        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Search by ID or Name"/>
+      </AccessibilityProperties>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -304,6 +311,9 @@
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JTextField" name="searchByIDtxt">
+          <Events>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="searchByIDtxtKeyReleased"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

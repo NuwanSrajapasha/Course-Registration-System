@@ -104,8 +104,21 @@ public class StudentForm extends javax.swing.JFrame {
      }
      
      public void updatebtn(){
-         
-     
+        String usid=studentIDtxt.getText();
+        String sName=studentNametxt.getText();
+        String DOB=studentDOBtxt.getText();
+        String program=studentProgramtxt.getText();
+        int year=Integer.parseInt(studentYeartxt.getText());
+        String contact=studentContacttxt.getText();
+    
+         try {
+             String sql="UPDATE student SET StudentName='"+sName+"',DOB='"+DOB+"',Program='"+program+"',Year='"+year+"',Phone='"+contact+"' WHERE StudentID='"+usid+"'";
+             pst=conn.prepareStatement(sql);
+             pst.execute();
+             JOptionPane.showMessageDialog(null, sName+"'s Data updated..");
+         } catch (Exception e) {
+             JOptionPane.showMessageDialog(null, e);
+         }
      
      }
      
@@ -398,6 +411,8 @@ public class StudentForm extends javax.swing.JFrame {
 
     private void updateStudentbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateStudentbtnActionPerformed
         // TODO add your handling code here:
+        updatebtn();
+        tableload();
     }//GEN-LAST:event_updateStudentbtnActionPerformed
 
     private void addStudentbtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addStudentbtn1ActionPerformed
@@ -433,6 +448,20 @@ public class StudentForm extends javax.swing.JFrame {
 
     private void deleteStudentbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteStudentbtnActionPerformed
         // TODO add your handling code here:
+        int check=JOptionPane.showConfirmDialog(null,"Do you want to delete...");
+        
+        if(check==0){
+            String getID=studentIDtxt.getText();
+            try {
+                 String sql="DELETE FROM student WHERE StudentID='"+getID+"'";
+                 pst=conn.prepareStatement(sql);
+                 pst.execute();
+                 JOptionPane.showMessageDialog(null,"Deleted...!");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+        tableload();
     }//GEN-LAST:event_deleteStudentbtnActionPerformed
 
     private void acdemicRecordbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acdemicRecordbtnActionPerformed

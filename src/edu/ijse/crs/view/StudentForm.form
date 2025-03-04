@@ -289,9 +289,6 @@
           </Border>
         </Property>
       </Properties>
-      <AccessibilityProperties>
-        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Search by ID or Name"/>
-      </AccessibilityProperties>
 
       <Layout>
         <DimensionLayout dim="0">
